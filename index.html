@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pong Survival</title>
+  <link rel="icon" type="image/x-icon" sizes="32x32" href="assets/Pong_Survival_Icon_32x32.ico">
+  <link rel="icon" type="image/png" sizes="512x512" href="assets/Pong_Survival_Icon_512x512.png">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Main Menu Screen -->
+  <div id="mainMenu" class="screen" role="main" aria-labelledby="mainMenuTitle">
+    <h1 id="mainMenuTitle">Pong Survival</h1>
+    <div class="vertical-buttons">
+      <button id="startBtn" aria-label="Start Game">Start Game</button>
+      <button id="mainMenuLeaderboardBtn" aria-label="Open Leaderboard">Leaderboard</button>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="pongSurvival" style="position: relative; width:800px; height:600px; margin:20px auto; display:none;" role="region" aria-label="Game Screen">
+    <canvas id="gameCanvas" width="800" height="600" aria-label="Pong game canvas" role="img"></canvas>
+    <div id="scoreOverlay" class="overlay-text" aria-live="polite">0</div>
+    <div id="oopsOverlay" class="overlay-text" aria-live="assertive">Oops!</div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="endScreen" class="screen" role="region" aria-labelledby="winnerText">
+    <h2 id="winnerText">Game Over!</h2>
+    <p id="finalScore"></p>
+    <div class="vertical-buttons">
+      <button id="downloadScoreBtn" aria-label="Download Game Screenshot">Download Score</button>
+      <button id="showTrajectoryBtn" aria-label="Show Ball Trajectory">Show Trajectory</button>
+      <div class="input-row">
+        <label for="scoreName" class="sr-only">Enter your name</label>
+        <input id="scoreName" type="text" placeholder="Enter name" aria-label="Enter your name for leaderboard" />
+        <button id="saveScoreBtn" aria-label="Save Score">Save Score</button>
+      </div>
+      <div id="charPopup" class="popup-box" role="alert" aria-live="assertive"></div>
+      <button id="endLeaderboardBtn" aria-label="Open Leaderboard">Leaderboard</button>
+      <button id="restartBtn" aria-label="Restart Game">Restart</button>
+      <button id="mainMenuBtn" aria-label="Return to Main Menu">Main Menu</button>
+    </div>
+  </div>
+
+  <!-- Trajectory Screen -->
+  <div id="trajectoryScreen" style="display: none;" role="region" aria-labelledby="trajectoryTitle">
+    <h2 id="trajectoryTitle" class="trajectory-title">Trajectory</h2>
+    <canvas id="trajectoryCanvas" aria-label="Ball trajectory canvas"></canvas>
+    <div class="trajectory-buttons">
+      <button id="downloadTrajectoryPngBtn" aria-label="Download Trajectory as PNG">Download PNG</button>
+      <button id="downloadTrajectoryJsonBtn" aria-label="Download Trajectory as JSON">Download JSON</button>
+      <button id="backToEndBtn" aria-label="Back to Game Over Screen">Back</button>
+      <button id="trajectoryMainMenuBtn" aria-label="Return to Main Menu">Main Menu</button>
+    </div>
+  </div>
+
+  <!-- Leaderboard Screen -->
+  <div id="leaderboardScreen" class="screen" role="region" aria-labelledby="leaderboardTitle">
+    <h2 id="leaderboardTitle">Leaderboard</h2>
+    <ul id="leaderboardList" role="list"></ul>
+    <div class="vertical-buttons">
+      <button id="downloadLeaderboardBtn" aria-label="Download Leaderboard">Download Leaderboard</button>
+      <div id="confirmBox" class="popup-box"></div>
+      <button id="backToMainMenuBtn" aria-label="Return to Main Menu">Main Menu</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/html2canvas.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

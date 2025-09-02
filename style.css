@@ -1,0 +1,206 @@
+/* BoldPixels font setup */
+@font-face {
+  font-family: 'BoldPixels';
+  src: url('assets/fonts/boldpixels/BoldPixels1.4.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Global reset & body styling */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: black;
+  color: white;
+  font-family: 'BoldPixels', monospace, Arial, sans-serif;
+  font-size: 18px;
+  text-align: center;
+}
+
+p { margin: 0 0 16px 0; line-height: 1; }
+
+/* Headings & final score */
+h1, h2 {
+  margin: 0 0 16px 0;
+  font-family: 'BoldPixels', monospace, Arial, sans-serif;
+  font-size: 36px;
+}
+
+#finalScore { margin: 8px 0 0 0; font-size: 28px; }
+
+/* Screens & layout helpers */
+.screen { display: none; margin-top: 40px; }
+
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.input-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  margin: 0;
+}
+
+#scoreName,
+#saveScoreBtn { margin: 0; }
+
+/* Buttons and inputs */
+button, input[type="text"] {
+  padding: 12px 18px;
+  font-size: 18px;
+  border: 2px solid white;
+  background: black;
+  color: white;
+  cursor: pointer;
+  border-radius: 0;
+  font-family: 'BoldPixels', monospace, Arial, sans-serif;
+}
+
+button:focus-visible,
+input[type="text"]:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 2px;
+}
+
+button:hover,
+input[type="text"]:hover,
+input[type="text"]:focus {
+  background: white;
+  color: black;
+}
+
+#scoreName { width: 170px; }
+
+#scoreName::placeholder { color: rgba(255, 255, 255, 0.4); opacity: 1; }
+#scoreName:hover::placeholder, #scoreName:focus::placeholder, #scoreName:active::placeholder { color: rgba(0, 0, 0, 0.5); }
+
+/* Overlay text */
+.overlay-text {
+  position: absolute;
+  font-family: 'BoldPixels', monospace, Arial, sans-serif;
+  font-size: 18px;
+  color: white;
+  pointer-events: none;
+  user-select: none;
+  z-index: 10;
+  text-align: center;
+}
+
+#scoreOverlay, #oopsOverlay { display: none; }
+
+/* Leaderboard */
+.leaderboard-empty { text-align: center; width: 400px; margin: 34px auto; }
+
+#leaderboardList {
+  list-style: none;
+  padding: 0;
+  margin: 28px auto;
+  width: 400px;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+  scrollbar-width: thin;
+  scrollbar-color: white black;
+  padding-right: 12px;
+}
+
+#leaderboardList::-webkit-scrollbar { width: 8px; }
+#leaderboardList::-webkit-scrollbar-track { background: black; }
+#leaderboardList::-webkit-scrollbar-thumb { background: white; }
+
+.leaderboard-item {
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  column-gap: 8px;
+  align-items: center;
+  margin: 4px 0;
+}
+
+.rank { text-align: right; }
+.name-score { word-break: break-word; line-height: 1; }
+
+.remove-btn {
+  justify-self: end;
+  border: 2px solid black;
+  background: black;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 0 6px;
+}
+
+.remove-btn:hover { background: white; color: black; }
+
+/* Popups and confirm boxes */
+.popup-box, #confirmBox, #charPopup {
+  display: none !important;
+  background: rgba(255, 255, 255, 0.10);
+  padding: 12px 18px;
+  border: 1px solid white;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto;
+  font-size: 18px;
+  width: auto;
+  min-width: 0;
+  max-width: min(90vw, 420px);
+  box-sizing: border-box;
+  white-space: normal;
+}
+
+.popup-box p, #confirmBox p, #charPopup p { margin: 0; padding: 0; }
+
+.popup-box[style*="display:flex"], .popup-box[style*="display: flex"],
+#confirmBox[style*="display:flex"], #confirmBox[style*="display: flex"],
+#charPopup[style*="display:flex"], #charPopup[style*="display: flex"] {
+  display: inline-flex !important;
+  flex-direction: column !important;
+}
+
+.popup-actions { display: flex; justify-content: center; gap: 8px; margin-top: 0; }
+
+/* Trajectory & final score */
+#finalScore, .trajectory-title { margin: 0 0 18px 0; }
+.trajectory-title { margin-top: 16px; margin-bottom: 20px; text-align: center; color: white; }
+.trajectory-buttons { display: flex; flex-direction: column; gap: 12px; align-items: center; margin-top: 18px; }
+.trajectory-buttons button { padding: 12px 18px; margin: 0; width: auto; min-width: 120px; text-align: center; }
+
+/* Accessibility helpers */
+.visually-hidden, .sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Responsive adjustments */
+@media(max-width: 480px) {
+  #leaderboardList, .confirm-box, .popup, #confirmBox { width: 90vw; max-width: 400px; }
+  canvas { width: 90vw; height: auto; }
+}
+
+/* Pixel-perfect rendering for bitmap font */
+body, canvas, input, button {
+  image-rendering: optimizeSpeed;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: pixelated;
+  -ms-interpolation-mode: nearest-neighbor;
+}
