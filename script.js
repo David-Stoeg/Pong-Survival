@@ -720,7 +720,7 @@ if (saveScoreBtn) {
         }
 
         const data = getLeaderboard();
-        data.push({ id: Date.now() + Math.floor(Math.random()*100000), name, score });
+        data.push({ id: crypto.randomUUID(), timestamp: Date.now(), name, score });
         saveLeaderboard(data);
         renderLeaderboard();
 
@@ -730,7 +730,6 @@ if (saveScoreBtn) {
         scoreSaved = true;
     });
 }
-
 
 /* Show/hide Pong screen */
 function showPongScreen() {
