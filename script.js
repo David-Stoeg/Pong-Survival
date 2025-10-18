@@ -714,8 +714,9 @@ if (saveScoreBtn) {
         if (scoreSaved) return;
 
         let name = (scoreName?.value || '').trim();
+
         if (!name) {
-            showCharPopup('Character not supported!');
+            showCharPopup('Enter your name before saving!');
             return;
         }
 
