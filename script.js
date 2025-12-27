@@ -210,23 +210,87 @@ function drawTrajectoryOnCanvas() {
 }
 
 /* Controls */
-document.addEventListener("keydown", e => { if(keys.hasOwnProperty(e.key)) keys[e.key] = true; });
-document.addEventListener("keyup", e => { if(keys.hasOwnProperty(e.key)) keys[e.key] = false; });
+let activeInput = null;
+
+document.addEventListener("keydown", e => {
+    if(!keys.hasOwnProperty(e.key)) return;
+    if(activeInput === 'pointer') return;
+    activeInput = 'keyboard';
+    keys[e.key] = true;
+});
+document.addEventListener("keyup", e => {
+    if(!keys.hasOwnProperty(e.key)) return;
+    keys[e.key] = false;
+    if(activeInput === 'keyboard' && !keys.ArrowUp && !keys.ArrowDown) activeInput = null;
+});
+
+const pointerKeys = { ArrowUp: false, ArrowDown: false };
+let pointerY = null;
 
 function handlePointer(y, active) {
-    if(!active) { keys.ArrowUp = false; keys.ArrowDown = false; return; }
+    if(!active || !player) { pointerY = null; pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = false; return; }
     const rect = canvas.getBoundingClientRect();
-    const relY = y - rect.top;
-    keys.ArrowUp = relY < canvas.height / 2;
-    keys.ArrowDown = relY >= canvas.height / 2;
+    let relY = y - rect.top;
+    relY = Math.max(0, Math.min(canvas.height, relY));
+    pointerY = relY;
 }
 
-canvas.addEventListener('mousedown', e => { pointerActive = true; handlePointer(e.clientY, true); });
-canvas.addEventListener('mousemove', e => { if(pointerActive) handlePointer(e.clientY, true); });
-canvas.addEventListener('mouseup', () => { pointerActive = false; keys.ArrowUp = false; keys.ArrowDown = false; });
-canvas.addEventListener('touchstart', e => { e.preventDefault(); pointerActive = true; handlePointer(e.touches[0].clientY, true); }, { passive: false });
-canvas.addEventListener('touchmove', e => { e.preventDefault(); handlePointer(e.touches[0].clientY, true); }, { passive: false });
-canvas.addEventListener('touchend', () => { pointerActive = false; keys.ArrowUp = false; keys.ArrowDown = false; });
+function updatePointerControls() {
+    if(activeInput !== 'pointer' || pointerY === null || !player) { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = false; return; }
+
+    const paddleCenterY = player.y + paddleHeight / 2;
+    const deadzone = 8;
+    const hysteresis = 6;
+
+    const movingUp = pointerKeys.ArrowUp && !pointerKeys.ArrowDown;
+    const movingDown = pointerKeys.ArrowDown && !pointerKeys.ArrowUp;
+
+    if(!movingUp && !movingDown) {
+        if(pointerY < paddleCenterY - deadzone) { pointerKeys.ArrowUp = true; pointerKeys.ArrowDown = false; }
+        else if(pointerY > paddleCenterY + deadzone) { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = true; }
+        else { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = false; }
+    } else if(movingUp) {
+        if(pointerY > paddleCenterY + deadzone + hysteresis) { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = true; }
+        else if(pointerY > paddleCenterY - deadzone) { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = false; }
+    } else if(movingDown) {
+        if(pointerY < paddleCenterY - deadzone - hysteresis) { pointerKeys.ArrowUp = true; pointerKeys.ArrowDown = false; }
+        else if(pointerY < paddleCenterY + deadzone) { pointerKeys.ArrowUp = false; pointerKeys.ArrowDown = false; }
+    }
+}
+
+canvas.addEventListener('mousedown', e => {
+    if(activeInput === 'keyboard') return;
+    activeInput = 'pointer';
+    pointerActive = true;
+    keys.ArrowUp = false; keys.ArrowDown = false;
+    handlePointer(e.clientY, true);
+});
+canvas.addEventListener('mousemove', e => { if(pointerActive && activeInput === 'pointer') handlePointer(e.clientY, true); });
+window.addEventListener('mouseup', () => {
+    if(activeInput === 'pointer') activeInput = null;
+    pointerActive = false;
+    handlePointer(0, false);
+});
+
+canvas.addEventListener('touchstart', e => {
+    e.preventDefault();
+    if(activeInput === 'keyboard') return;
+    activeInput = 'pointer';
+    pointerActive = true;
+    keys.ArrowUp = false; keys.ArrowDown = false;
+    handlePointer(e.touches[0].clientY, true);
+}, { passive: false });
+canvas.addEventListener('touchmove', e => { e.preventDefault(); if(activeInput === 'pointer') handlePointer(e.touches[0].clientY, true); }, { passive: false });
+canvas.addEventListener('touchend', () => {
+    if(activeInput === 'pointer') activeInput = null;
+    pointerActive = false;
+    handlePointer(0, false);
+});
+canvas.addEventListener('touchcancel', () => {
+    if(activeInput === 'pointer') activeInput = null;
+    pointerActive = false;
+    handlePointer(0, false);
+});
 
 /* Ball & AI */
 function getRandomAngle() {
@@ -307,7 +371,12 @@ function recordTrajectory() {
 function update() {
     if (gameOver) return;
 
-    player.dy = keys.ArrowUp && !keys.ArrowDown ? -paddleSpeed : keys.ArrowDown && !keys.ArrowUp ? paddleSpeed : 0;
+    updatePointerControls();
+
+    const up = activeInput === 'pointer' ? pointerKeys.ArrowUp : activeInput === 'keyboard' ? keys.ArrowUp : false;
+    const down = activeInput === 'pointer' ? pointerKeys.ArrowDown : activeInput === 'keyboard' ? keys.ArrowDown : false;
+
+    player.dy = up && !down ? -paddleSpeed : down && !up ? paddleSpeed : 0;
     player.y += player.dy;
     player.y = Math.max(0, Math.min(player.y, canvas.height - paddleHeight));
 

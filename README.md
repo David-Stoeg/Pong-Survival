@@ -14,7 +14,7 @@ You may even export your scores, trajectories, and leaderboard to save them on y
 
 
 
-Use the arrow keys or touch controls to move your paddle and see how long you can survive.
+Use the arrow keys, mouse/touch controls to move your paddle and see how long you can survive.
 
 
 
