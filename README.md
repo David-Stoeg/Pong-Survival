@@ -7,3 +7,19 @@ Try to beat your personal high scores. If you are content with a score, you can 
 Use the arrow keys or mouse/touch controls to move your paddle and see how long you can survive.
 
 Have fun!
+
+## Screenshots
+
+<p align="center">
+  <img src="screenshots/Pong_Survival_Main_Menu.png" alt="Pong Survival Main Menu" width="48%"/>
+  <img src="screenshots/Pong_Survival_Gameplay.png" alt="Pong Survival Gameplay" width="48%"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/Pong_Survival_Game_Over.png" alt="Pong Survival Game Over" width="48%"/>
+  <img src="screenshots/Pong_Survival_Trajectory.png" alt="Pong Survival Trajectory" width="48%"/>
+</p>
+
+<p align="center">
+  <img src="screenshots/Pong_Survival_Leaderboard.png" alt="Pong Survival Leaderboard" width="48%"/>
+</p>
